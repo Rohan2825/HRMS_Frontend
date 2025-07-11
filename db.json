@@ -1,0 +1,26 @@
+{
+  "employees": [
+    {
+      "id": "e9d2",
+      "name": "ABCDE",
+      "email": "123@gmail.com",
+      "department": "sales",
+      "designation": "senior",
+      "userType": "hr",
+      "salary": "2222222555555",
+      "password": "12345678",
+      "date": "2025-07-08"
+    },
+    {
+      "id": "8852",
+      "name": "Rohan",
+      "email": "1234@gmail.com",
+      "department": "marketing",
+      "designation": "midlevel",
+      "userType": "manager",
+      "salary": "4000000",
+      "password": "2825",
+      "date": "2025-07-08"
+    }
+  ]
+}
