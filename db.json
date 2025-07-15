@@ -21,6 +21,18 @@
       "salary": "4000000",
       "password": "2825",
       "date": "2025-07-08"
+    },
+    {
+      "id": "5174",
+      "name": "Guts",
+      "email": "2222@gmail.com",
+      "department": "marketing",
+      "designation": "intern",
+      "userType": "employee",
+      "salary": "28000",
+      "Password": "2222",
+      "ConfirmPassword": "2222",
+      "date": "2025-07-15"
     }
   ]
 }
