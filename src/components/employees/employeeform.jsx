@@ -8,112 +8,99 @@ export default function EmployeeForm({
   editEmployee,
   setEditEmployee,
 }) {
-const[name, setName] = useState("");
-const[email, setEmail] = useState("");
-const[department, setDepartment] = useState("");
-const[designation, setDesignation] = useState("");
-const[userType, setUserType] = useState("");
-const[salary, setSalary] = useState("");
-const[Password, setPassword] = useState("");
-const[ConfirmPassword, setConfirmPassword] = useState("");
-useEffect(() => {
-  if(editEmployee){
-    setName(editEmployee.name);
-    setEmail(editEmployee.email);
-    setDepartment(editEmployee.department);
-    setDesignation(editEmployee.designation);
-    setUserType(editEmployee.userType);
-    setSalary(editEmployee.salary);
-  }
-}, [editEmployee]);
-const handleSubmit =async (e) =>{
-    e.preventDefault();
-    if(
-        !name ||
-        !email||
-        !department||
-        !designation||
-        !userType||
-        !salary||
-        !Password||
-        !ConfirmPassword
-
-    ){
-        alert ("Please fill out all fields");
-        return;
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [department, setDepartment] = useState("");
+  const [designation, setDesignation] = useState("");
+  const [userType, setUserType] = useState("");
+  const [salary, setSalary] = useState("");
+  const [password, setPassword] = useState("");
+  const [ConfirmPassword, setConfirmPassword] = useState("");
+  useEffect(() => {
+    if (editEmployee) {
+      setName(editEmployee.name);
+      setEmail(editEmployee.email);
+      setDepartment(editEmployee.department);
+      setDesignation(editEmployee.designation);
+      setUserType(editEmployee.userType);
+      setSalary(editEmployee.salary);
     }
-    if(Password!== ConfirmPassword){
-        alert("Password do not match")
+  }, [editEmployee]);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (
+      !name ||
+      !email ||
+      !department ||
+      !designation ||
+      !userType ||
+      !salary ||
+      !password ||
+      !ConfirmPassword
+    ) {
+      alert("Please fill out all fields");
+      return;
+    }
+    if (password !== ConfirmPassword) {
+      alert("Password do not match");
+      return;
     }
     const employeeData = {
-        name,
-        email,
-        department,
-        designation,
-        userType,
-        salary,
-        Password,
-        ConfirmPassword,
-        date: new Date().toISOString().split("T")[0],
+      name,
+      email,
+      department,
+      designation,
+      userType,
+      salary,
+      password,
+      ConfirmPassword,
+      date: new Date().toISOString().split("T")[0],
     };
-    const token= localStorage.getItem("token");
-    try{
-      if(editEmployee){
+    const token = localStorage.getItem("token");
+    try {
+      if (editEmployee) {
         const response = await axios.put(
-          `http://localhost:5000/employees/${editEmployee.id}`,
+          `http://localhost:8000/employee/${editEmployee._id}`,
           employeeData,
-          { headers: { Authorization: `Bearer ${token}`}}
+          { headers: { Authorization: `Bearer ${token}` } }
         );
-        setEmployees((prev) => 
-          prev.map((emp) => (emp.id === editEmployee.id? response.data : emp))
-      );
-      alert("Employee updated Succesfully");
-      setEditEmployee(null);
-      } else{
-         const response = await axios.post(
-          "http://localhost:5000/employees",
+        setEmployees((prev) =>
+          prev.map((emp) =>
+            emp._id === editEmployee._id ? response.data.data : emp
+          )
+        );
+        alert("Employee updated Succesfully");
+        setEditEmployee(null);
+      } else {
+        const response = await axios.post(
+          "http://localhost:8000/employee",
           employeeData,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
-         );
-         setEmployees((prev) => [...prev, response.data]);
-         setModelForm(false);
-         if(response.status === 201) {
-          alert("Employee added Successfully");
-         }
-      }
-        const response = await axios.post(
-            "http://localhost:5000/employees",
-            newEmployee,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
         );
-        setEmployees((prev) => [...prev, response.data]);
-    setModelForm(false);
-        if(response.status === 201){
-            alert("Employee added successfully");
-            setName("");
-            setEmail("");
-            setDepartment("");
-            setUserType("");
-            setSalary("");
-            setPassword("");
-            setConfirmPassword("");
-
+        setEmployees((prev) => [...prev, response.data.data]);
+        setModelForm(false);
+        if (response.status === 201) {
+          alert("Employee added Successfully");
         }
-    }catch(error) {
-        console.error("error adding emoployee:", error);
-        alert("something went wrong while adding employee")
-    }    
-};
+      }
 
-
+      setName("");
+      setEmail("");
+      setDepartment("");
+      setUserType("");
+      setSalary("");
+      setPassword("");
+      setConfirmPassword("");
+    } catch (error) {
+      console.error("error adding emoployee:", error);
+      alert("something went wrong while adding employee");
+    }
+  };
 
   return (
     <div className="p-7 sm:p-8">
@@ -145,7 +132,6 @@ const handleSubmit =async (e) =>{
               placeholder=""
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-
               className="w-full px-2 py-1 border rounded-md focus:ring-1 focus:ring-blue-400 focus:outline-none"
             />
           </div>
@@ -159,7 +145,8 @@ const handleSubmit =async (e) =>{
             <select
               value={department}
               onChange={(e) => setDepartment(e.target.value)}
-            className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none text-sm">
+              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none text-sm"
+            >
               <option value="" disabled>
                 Select
               </option>
@@ -176,8 +163,8 @@ const handleSubmit =async (e) =>{
             <select
               value={designation}
               onChange={(e) => setDesignation(e.target.value)}
-            
-            className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none text-sm">
+              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none text-sm"
+            >
               <option value="" disabled>
                 Select
               </option>
@@ -194,11 +181,11 @@ const handleSubmit =async (e) =>{
             <label className="block text-sm text-gray-700 mb-1">
               User Type
             </label>
-            <select 
+            <select
               value={userType}
               onChange={(e) => setUserType(e.target.value)}
-
-            className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none text-sm">
+              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none text-sm"
+            >
               <option value="" disabled>
                 Select
               </option>
@@ -215,7 +202,6 @@ const handleSubmit =async (e) =>{
               placeholder="50000"
               value={salary}
               onChange={(e) => setSalary(e.target.value)}
-
               className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none text-sm"
             />
           </div>
@@ -227,7 +213,7 @@ const handleSubmit =async (e) =>{
             <input
               type="password"
               placeholder="*********"
-              value={Password}
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none text-sm"
             />
@@ -247,12 +233,11 @@ const handleSubmit =async (e) =>{
         </div>
 
         <div className="pt-2">
-          <Button type="submit">
+          <Button type="submit" className="bg-blue-400">
             {editEmployee ? "update Employee" : "Add Employee"}
           </Button>
         </div>
       </form>
     </div>
   );
-}  
-
+}

@@ -11,15 +11,19 @@ export default function Employee() {
   const [employees, setEmployees] = useState([]);
   const [editEmployee, setEditEmployee] = useState(null);
 
+
   const fetchEmployees = async () => {
     const token = localStorage.getItem("token");
     try {
-      const res = await axios.get("http://localhost:5000/employees", {
+      const res = await axios.get("http://localhost:8000/employee", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setEmployees(res.data);
+      if (res.status === 200) {
+        setEmployees(res?.data.data);
+      }
+      
     } catch (err) {
       console.error("Failed to fetch employees", err);
     }
@@ -29,19 +33,19 @@ export default function Employee() {
     fetchEmployees();
   }, []);
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (_id) => {
     const confirmDelete = window.confirm("Do you want to delete the employee?");
     if (!confirmDelete) return;
 
     const token = localStorage.getItem("token");
     try {
-      await axios.delete(`http://localhost:5000/employees/${id}`, {
+      await axios.delete(`http://localhost:8000/employee/${_id}`, {
         headers: {
           Authorization: `Bearer ${token}`, // Fixed typo from "Authorizaton"
         },
       });
 
-      setEmployees((prev) => prev.filter((emp) => emp.id !== id));
+      setEmployees((prev) => prev.filter((emp) => emp._id !== _id));
       alert("Employee deleted successfully!");
     } catch (error) {
       console.error("Error deleting employee:", error);
